@@ -73,7 +73,14 @@ public class driver {
             	slots.add(s);
             }
             //Getting the machine ready
-            Machine cofMachine = new Machine(slots, numOutlets);
+            Machine cofMachine;
+            try {
+            	 cofMachine = new Machine(slots, numOutlets);
+            } catch(Exception e) {
+            	System.out.println(e.toString());
+            	return;
+            }
+           
             //Getting recipes and brewing it...
             JSONObject beverages = (JSONObject) machine.get("beverages");
             ArrayList<Recipe> recipes = new ArrayList<Recipe>();

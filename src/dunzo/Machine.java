@@ -5,11 +5,17 @@ import java.util.ArrayList;
 public class Machine {
 	private ArrayList<Slot> slots;
 	private Outlet outlets[];
-	Machine(ArrayList<Slot> slots, int numOutlets){
+	Machine(ArrayList<Slot> slots, int numOutlets) throws Exception{
 		this.slots = slots;
 		this.outlets = new Outlet[numOutlets];
 		for(int i=0;i<numOutlets;i++) {
 			this.outlets[i] = new Outlet();
+		}
+		if(slots == null || slots.size()==0) {
+			throw new Exception("Machine can't be initiated without any slots");
+		}
+		if(numOutlets <= 0) {
+			throw new Exception("Machine can't be without any outlets");
 		}
 	}
 	public synchronized void brew(Recipe recipe){
