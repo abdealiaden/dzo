@@ -33,7 +33,7 @@ public class Outlet {
 				}
 			}
 			try {
-				Thread.sleep(10000); //Coffee preparation takes some time to process
+				Thread.sleep(1000); //Coffee preparation takes some time to process
 			} catch(InterruptedException e) {
 				//Refill recipe ingredient here
 				System.out.println("Coffee cannot be processed because the process has been interrupted");
@@ -47,5 +47,8 @@ public class Outlet {
 	}
 	public boolean isAvailable() {
 		return isFree;
+	}
+	public void setBusy() {
+		this.isFree = false;
 	}
 }

@@ -2,14 +2,14 @@ package dunzo;
 //Assumption :- only one slot available for each ingredient
 public class Slot { //Slot in the machine represents a container where ingredient is filled
 	private Ingredient ingredient;
-	private int quantity; //Quantity in ml
-	private int maxQuantity; //This represents maximum quantity of ingredient allowed per slot
-	Slot(Ingredient ingredient, int quantity, int maxQuantity){
+	private long quantity; //Quantity in ml
+	private long maxQuantity; //This represents maximum quantity of ingredient allowed per slot
+	Slot(Ingredient ingredient, long quantity, long maxQuantity){
 		this.ingredient = ingredient;
 		this.quantity = quantity;
 		this.maxQuantity = maxQuantity;
 	}
-	public int getQuantity() {
+	public long getQuantity() {
 		return this.quantity;
 	}
 	public Ingredient getIngredient() {
@@ -20,10 +20,10 @@ public class Slot { //Slot in the machine represents a container where ingredien
 		this.toggleBeepIfNecessary();
 	}
 	public void refillSlotBy(int quanity) { //This function refills the slot by certain amount not exceeding the maximum permissible limit (maxQuantity)
-		this.quantity = Integer.max((this.quantity + quantity), maxQuantity);
+		this.quantity = Long.max((this.quantity + quantity), maxQuantity);
 		this.toggleBeepIfNecessary();
 	}
-	public void dispenseIngredient(int quantity) throws IngredientNotSufficientException { //This function takes out the ingredient from the slot to brew coffee. It returns true if ingredient available else it returns false
+	public void dispenseIngredient(long quantity) throws IngredientNotSufficientException { //This function takes out the ingredient from the slot to brew coffee. It returns true if ingredient available else it returns false
 		if(quantity<=this.quantity) {
 			this.quantity = this.quantity - quantity;
 			this.toggleBeepIfNecessary();

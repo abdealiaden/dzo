@@ -12,7 +12,7 @@ public class Machine {
 			this.outlets[i] = new Outlet();
 		}
 	}
-	public void brew(Recipe recipe) throws CannotBeBrewedException{
+	public synchronized void brew(Recipe recipe){
 			Outlet availableOutlet = null;
 			Object thisReference = this;
 			for(int i=0;i<outlets.length;i++) {
@@ -22,19 +22,28 @@ public class Machine {
 				}
 			}
 			if(availableOutlet != null) {
+				availableOutlet.setBusy();
 				final Outlet outletToBeUsed = availableOutlet;
 				new Thread(new Runnable() {
 					public void run(){
 						try {
 							outletToBeUsed.brew(slots, recipe, thisReference);
 							
-						} catch(Exception e) {
+						} catch(IngredientNotAvailableException e) {
 							//If any exception is thrown here we need to resume execution of other pending requests
 							synchronized(thisReference) {
 								thisReference.notify();
 							}
-							System.out.println(recipe.getName()+" can't be brewed");
-							System.out.println(e.toString());
+							System.out.println(recipe.getName()+" can't be brewed because "+e.getIngredient().getName()+" is not available");
+							
+						}
+						catch(IngredientNotSufficientException e) {
+							//If any exception is thrown here we need to resume execution of other pending requests
+							synchronized(thisReference) {
+								thisReference.notify();
+							}
+							System.out.println(recipe.getName()+" can't be brewed because "+e.getIngredient().getName()+" is not sufficient");
+							
 						}
 					}
 				}).start();		
