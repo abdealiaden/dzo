@@ -73,13 +73,10 @@ public class driver {
             	slots.add(s);
             }
             //Getting the machine ready
-            Machine cofMachine;
-            try {
-            	 cofMachine = new Machine(slots, numOutlets);
-            } catch(Exception e) {
-            	System.out.println(e.toString());
-            	return;
-            }
+            Machine cofMachine = new Machine(slots, numOutlets);
+           
+            
+            	
            
             //Getting recipes and brewing it...
             JSONObject beverages = (JSONObject) machine.get("beverages");
@@ -118,6 +115,8 @@ public class driver {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch(Exception e) {
+        	System.out.println(e.toString());
         }
 	}
 	

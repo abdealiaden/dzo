@@ -4,7 +4,10 @@ public class Slot { //Slot in the machine represents a container where ingredien
 	private Ingredient ingredient;
 	private long quantity; //Quantity in ml
 	private long maxQuantity; //This represents maximum quantity of ingredient allowed per slot
-	Slot(Ingredient ingredient, long quantity, long maxQuantity){
+	Slot(Ingredient ingredient, long quantity, long maxQuantity) throws Exception{
+		if(quantity<0 || maxQuantity<0) {
+			throw new Exception("Quantity cant be negative");
+		}
 		this.ingredient = ingredient;
 		this.quantity = quantity;
 		this.maxQuantity = maxQuantity;
