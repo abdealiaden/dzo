@@ -9,6 +9,12 @@ public class Slot { //Slot in the machine represents a container where ingredien
 		this.quantity = quantity;
 		this.maxQuantity = maxQuantity;
 	}
+	public int getQuantity() {
+		return this.quantity;
+	}
+	public Ingredient getIngredient() {
+		return this.ingredient;
+	}
 	public void refillSlot() { // This function refills the slot
 		this.quantity = this.maxQuantity;
 		this.toggleBeepIfNecessary();
@@ -17,13 +23,12 @@ public class Slot { //Slot in the machine represents a container where ingredien
 		this.quantity = Integer.max((this.quantity + quantity), maxQuantity);
 		this.toggleBeepIfNecessary();
 	}
-	public Boolean takeOutIngredient(int quantity) { //This function takes out the ingredient from the slot to brew coffee. It returns true if ingredient available else it returns false
+	public void dispenseIngredient(int quantity) throws IngredientNotSufficientException { //This function takes out the ingredient from the slot to brew coffee. It returns true if ingredient available else it returns false
 		if(quantity<=this.quantity) {
 			this.quantity = this.quantity - quantity;
 			this.toggleBeepIfNecessary();
-			return true;
 		} else {
-			return false;
+			throw new IngredientNotSufficientException(this.ingredient);
 		}
 	}
 	private void toggleBeepIfNecessary() {

@@ -5,16 +5,14 @@ import java.util.ArrayList;
 public class Machine {
 	private ArrayList<Slot> slots;
 	private Outlet outlets[];
-	private ArrayList<Recipe> recipes;
-	Machine(ArrayList<Slot> slots, ArrayList<Recipe> recipes, int numOutlets){
+	Machine(ArrayList<Slot> slots, int numOutlets){
 		this.slots = slots;
-		this.recipes = recipes;
 		this.outlets = new Outlet[numOutlets];
 		for(int i=0;i<numOutlets;i++) {
 			this.outlets[i] = new Outlet();
 		}
 	}
-	public void brew(Recipe recipe) {
+	public void brew(Recipe recipe) throws CannotBeBrewedException{
 			Outlet availableOutlet = null;
 			Object thisReference = this;
 			for(int i=0;i<outlets.length;i++) {
@@ -26,24 +24,29 @@ public class Machine {
 			if(availableOutlet != null) {
 				final Outlet outletToBeUsed = availableOutlet;
 				new Thread(new Runnable() {
-					public void run() {
+					public void run(){
 						try {
 							outletToBeUsed.brew(slots, recipe, thisReference);
 							
 						} catch(Exception e) {
+							//If any exception is thrown here we need to resume execution of other pending requests
+							synchronized(thisReference) {
+								thisReference.notify();
+							}
+							System.out.println(recipe.getName()+" can't be brewed");
 							System.out.println(e.toString());
 						}
 					}
-				}).start();
+				}).start();		
 			} else {
 				new Thread(new Runnable() { //Starting a new thread so that main thread is not blocked
 					public void run() {
 						synchronized(thisReference) {
 							try {
 								thisReference.wait();
-								brew(null);
+								brew(recipe);
 							} catch(Exception e) {
-								
+								System.out.println("Idhar");
 							}
 							
 						}
